@@ -87,7 +87,7 @@ const TabBarItem = memo<{
     setIsPressed(true)
   }, [])
 
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+  const handleTouchEnd = useCallback((e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setIsPressed(false)
