@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, ElevatedCard, InteractiveCard } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, Plus, QrCode, Sparkles, TrendingUp, CheckCircle, AlertCircle } from 'lucide-react'
+import { Calendar, Clock, MapPin, Plus, QrCode, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { EnhancedStatCard } from '@/components/ui/enhanced-stat-card'
@@ -144,7 +144,7 @@ async function AppointmentsContent() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y divide-gray-100 card-stagger">
-              {upcomingAppointments.map((appointment, index) => (
+              {upcomingAppointments.map((appointment) => (
                 <div
                   key={appointment.id}
                   className="p-6 hover:bg-blue-50/50 transition-modern group sophisticated-hover stagger-animation"

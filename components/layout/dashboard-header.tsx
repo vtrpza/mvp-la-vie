@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useCallback, useMemo, memo } from 'react'
-import { useHapticFeedback, hapticPatterns } from '@/lib/hooks/use-haptic-feedback'
+import { useHapticFeedback } from '@/lib/hooks/use-haptic-feedback'
 import { signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,7 +16,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { 
   LogOut, 
-  Settings, 
   User, 
   Bell,
   HelpCircle,
@@ -38,6 +37,8 @@ interface DashboardHeaderProps {
     name?: string | null
     email?: string | null
   }
+  onMenuToggle?: () => void
+  showMobileMenu?: boolean
 }
 
 // Enhanced interface with new features

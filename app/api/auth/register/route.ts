@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { hash } from 'bcryptjs'
+import { hash } from '@/lib/bcrypt'
 import { prisma } from '@/lib/db'
 import { z } from 'zod'
 

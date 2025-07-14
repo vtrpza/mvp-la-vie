@@ -10,9 +10,7 @@ import {
   Calendar, 
   User, 
   HelpCircle, 
-  Plus,
-  CheckCircle,
-  Clock
+  Plus
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
@@ -224,7 +222,6 @@ export const MobileTabBar = memo<MobileTabBarProps>(({
 }) => {
   const pathname = usePathname()
   const { triggerHaptic } = useHapticFeedback()
-  const [previousTab, setPreviousTab] = useState<string>('')
 
   // Determine active tab based on pathname
   const activeTabId = React.useMemo(() => {
@@ -244,7 +241,6 @@ export const MobileTabBar = memo<MobileTabBarProps>(({
   const handleTabPress = useCallback((tabId: string) => {
     if (tabId !== activeTabId) {
       triggerHaptic('light')
-      setPreviousTab(activeTabId)
       onTabChange?.(tabId)
     }
   }, [activeTabId, triggerHaptic, onTabChange])

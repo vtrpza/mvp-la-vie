@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { DashboardNav } from '@/components/layout/dashboard-nav'
 import { DashboardHeader, MobileNavMenu } from '@/components/layout/dashboard-header'
-import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { MobileTabBar } from '@/components/navigation/mobile-tab-bar'
 
 interface DashboardLayoutClientProps {
