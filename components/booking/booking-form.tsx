@@ -54,6 +54,8 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
   const handleDateSelect = async (date: string) => {
     setSelectedDate(date)
     setValue('date', date)
+    setValue('startTime', '') // Clear selected time when date changes
+    setError('') // Clear any previous errors
     
     if (selectedLocationId) {
       await fetchAvailableSlots(date, selectedLocationId)
@@ -63,6 +65,8 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
   const handleLocationChange = async (locationId: string) => {
     setSelectedLocationId(locationId)
     setValue('locationId', locationId)
+    setValue('startTime', '') // Clear selected time when location changes
+    setError('') // Clear any previous errors
     
     if (selectedDate) {
       await fetchAvailableSlots(selectedDate, locationId)
@@ -70,6 +74,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
   }
 
   const fetchAvailableSlots = async (date: string, locationId: string) => {
+    setIsLoading(true)
     try {
       const response = await fetch(
         `/api/appointments/available-slots?date=${date}&locationId=${locationId}`
@@ -80,10 +85,15 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         setAvailableSlots(data.slots || [])
       } else {
         setAvailableSlots([])
+        const errorData = await response.json()
+        setError(errorData.message || 'Erro ao carregar horários disponíveis')
       }
     } catch (error) {
       console.error('[FETCH_SLOTS_ERROR]:', error)
       setAvailableSlots([])
+      setError('Erro ao carregar horários disponíveis')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -146,7 +156,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         </Alert>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="petId">Selecione o pet</Label>
           <Select onValueChange={(value) => setValue('petId', value)} disabled={isLoading}>
@@ -213,6 +223,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
               selectedSlot={selectedTimeSlot}
               onSlotSelect={(slot) => setValue('startTime', slot)}
               disabled={isLoading}
+              isLoading={isLoading && selectedDate && selectedLocationId ? true : false}
             />
             {errors.startTime && (
               <p className="text-sm text-red-600">{errors.startTime.message}</p>
@@ -244,18 +255,20 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         </CardContent>
       </Card>
 
-      <div className="flex justify-end space-x-2">
+      <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
         <Button
           type="button"
           variant="outline"
           onClick={() => router.push('/dashboard/agendamentos')}
           disabled={isLoading}
+          className="w-full sm:w-auto"
         >
           Cancelar
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
+          className="w-full sm:w-auto"
         >
           {isLoading ? (
             <>

@@ -48,11 +48,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Calcular horário de fim (30 minutos após o início)
-    const [hours, minutes] = startTime.split(':').map(Number)
-    const startDate = new Date(date + 'T' + startTime + ':00')
-    const endDate = new Date(startDate.getTime() + 30 * 60 * 1000)
-    const endTime = endDate.toTimeString().slice(0, 5)
+    // Criar objetos DateTime para início e fim
+    const startDateTime = new Date(date + 'T' + startTime + ':00')
+    const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000)
 
     // Verificar se o horário está disponível
     const conflictingAppointment = await prisma.appointment.findFirst({
@@ -63,14 +61,14 @@ export async function POST(request: NextRequest) {
         OR: [
           {
             AND: [
-              { startTime: { lte: startTime } },
-              { endTime: { gt: startTime } }
+              { startTime: { lte: startDateTime } },
+              { endTime: { gt: startDateTime } }
             ]
           },
           {
             AND: [
-              { startTime: { lt: endTime } },
-              { endTime: { gte: endTime } }
+              { startTime: { lt: endDateTime } },
+              { endTime: { gte: endDateTime } }
             ]
           }
         ]
@@ -91,8 +89,8 @@ export async function POST(request: NextRequest) {
         petId,
         locationId,
         date: new Date(date + 'T00:00:00'),
-        startTime,
-        endTime,
+        startTime: startDateTime,
+        endTime: endDateTime,
         totalAmount,
         status: 'PENDING',
       },

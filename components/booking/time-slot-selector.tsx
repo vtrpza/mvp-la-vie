@@ -9,9 +9,23 @@ interface TimeSlotSelectorProps {
   selectedSlot: string
   onSlotSelect: (slot: string) => void
   disabled?: boolean
+  isLoading?: boolean
 }
 
-export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled }: TimeSlotSelectorProps) {
+export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled, isLoading }: TimeSlotSelectorProps) {
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="p-4">
+          <div className="text-center text-gray-500">
+            <Clock className="mx-auto h-8 w-8 mb-2 animate-spin" />
+            <p>Carregando horários disponíveis...</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (slots.length === 0) {
     return (
       <Card>
@@ -19,7 +33,7 @@ export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled }
           <div className="text-center text-gray-500">
             <Clock className="mx-auto h-8 w-8 mb-2" />
             <p>Nenhum horário disponível para esta data</p>
-            <p className="text-sm">Tente selecionar outra data</p>
+            <p className="text-sm">Tente selecionar outra data ou unidade</p>
           </div>
         </CardContent>
       </Card>
@@ -34,7 +48,7 @@ export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled }
           Horários disponíveis
         </h3>
         
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
           {slots.map((slot) => (
             <Button
               key={slot}

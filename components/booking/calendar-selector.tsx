@@ -89,7 +89,7 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
           disabled={isDateDisabled}
           month={currentMonth}
           onMonthChange={setCurrentMonth}
-          className="rounded-md border"
+          className="rounded-md border w-full"
         />
         
         {selectedDate && (

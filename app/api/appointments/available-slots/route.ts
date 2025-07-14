@@ -62,22 +62,20 @@ export async function GET(request: NextRequest) {
 
     // Filtrar slots ocupados
     const availableSlots = allSlots.filter(slot => {
-      const slotStart = slot
       const [hours, minutes] = slot.split(':').map(Number)
-      const slotEndTime = new Date()
-      slotEndTime.setHours(hours, minutes + 30, 0, 0)
-      const slotEnd = slotEndTime.toTimeString().slice(0, 5)
+      
+      // Criar objetos DateTime para o slot
+      const slotStartDateTime = new Date(selectedDate)
+      slotStartDateTime.setHours(hours, minutes, 0, 0)
+      
+      const slotEndDateTime = new Date(slotStartDateTime.getTime() + 30 * 60 * 1000)
 
       // Verificar se há conflito com algum agendamento existente
       const hasConflict = existingAppointments.some(appointment => {
-        // Converter DateTime para strings de tempo no formato HH:MM
-        const appointmentStart = appointment.startTime.toTimeString().slice(0, 5)
-        const appointmentEnd = appointment.endTime.toTimeString().slice(0, 5)
-        
         return (
-          (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
-          (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
-          (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
+          (slotStartDateTime >= appointment.startTime && slotStartDateTime < appointment.endTime) ||
+          (slotEndDateTime > appointment.startTime && slotEndDateTime <= appointment.endTime) ||
+          (slotStartDateTime <= appointment.startTime && slotEndDateTime >= appointment.endTime)
         )
       })
 
