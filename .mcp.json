@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "puppeteer": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@smithery/cli@latest",
+          "run",
+          "@smithery-ai/puppeteer",
+          "--key",
+          "d2cf8148-3d5c-4b21-a2d4-b5f175a3911b",
+          "--profile",
+          "howling-grass-DrJ2p_"
+        ]
+      },
+      "mcp-sequentialthinking-tools": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@smithery/cli@latest",
+          "run",
+          "@xinzhongyouhai/mcp-sequentialthinking-tools",
+          "--key",
+          "d2cf8148-3d5c-4b21-a2d4-b5f175a3911b",
+          "--profile",
+          "howling-grass-DrJ2p_"
+        ]
+      },
+    "@21st-dev/magic": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@21st-dev/magic@latest",
+        "API_KEY=\"8921be56e75b1d1d59ab31165ffa5bc0ccf17e637d54783b7d3eaf073367f758\""
+      ]
+    }
+  }
+}

@@ -1,0 +1,187 @@
+/* Mobile-Optimized CSS - Load conditionally for better performance */
+
+/* Core mobile-first styles */
+@media (max-width: 768px) {
+  /* Disable complex animations on mobile for better performance */
+  .complex-animation,
+  .floating-element,
+  .morphing-shape,
+  .breathing-animation,
+  .liquid-morph,
+  .animated-gradient,
+  .parallax-element,
+  .element-3d {
+    animation: none !important;
+    transform: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Simplify hover effects for touch devices */
+  .sophisticated-hover,
+  .magnetic-hover,
+  .glow-effect {
+    transition: none !important;
+  }
+
+  /* Optimize card interactions for mobile */
+  .modern-card {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  }
+
+  .modern-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Reduce shadow complexity on mobile */
+  .shadow-modern,
+  .shadow-modern-hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Simplify gradients */
+  .text-gradient {
+    background: var(--color-primary) !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    color: var(--color-primary) !important;
+  }
+
+  /* Optimize typography for mobile */
+  .text-hero {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .text-display {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+
+  .text-headline {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+
+  /* Mobile-first button optimizations */
+  .mobile-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 16px; /* Prevent zoom on iOS */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Optimized spacing for mobile */
+  .mobile-spacing {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  /* Better focus states for accessibility */
+  .mobile-focus:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Reduce padding on cards for mobile */
+  .mobile-card-content {
+    padding: 16px !important;
+  }
+
+  /* Optimize grid layouts for mobile */
+  .mobile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Mobile-optimized navigation */
+  .mobile-nav-item {
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: background-color 0.15s ease-out;
+  }
+
+  .mobile-nav-item:active {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+  }
+}
+
+/* Performance-critical animations only */
+@media (prefers-reduced-motion: no-preference) and (max-width: 768px) {
+  /* Keep only essential animations */
+  .mobile-press {
+    transition: transform 0.1s ease-out;
+  }
+
+  .mobile-press:active {
+    transform: scale(0.98);
+  }
+
+  .mobile-slide-in {
+    animation: mobile-slide-in 0.2s ease-out;
+  }
+
+  @keyframes mobile-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-fade-in {
+    animation: mobile-fade-in 0.15s ease-out;
+  }
+
+  @keyframes mobile-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* Touch-specific optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover states that don't work on touch */
+  .hover-only {
+    display: none !important;
+  }
+
+  /* Optimize for touch interaction */
+  .touch-optimized {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Better active states for touch */
+  .touch-active:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  /* Prevent double-tap zoom */
+  .no-zoom {
+    touch-action: manipulation;
+  }
+}
+
+/* Critical mobile styles that should always load */
+.mobile-critical {
+  min-height: 100vh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* PWA viewport optimizations */
+@media (display-mode: standalone) {
+  .pwa-optimized {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  pets         Pet[]
+  appointments Appointment[]
+  
+  @@map("users")
+}
+
+model Pet {
+  id     String @id @default(cuid())
+  name   String
+  breed  String?
+  size   PetSize
+  notes  String?
+  
+  // Relations
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+  
+  @@map("pets")
+}
+
+model Location {
+  id          String @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  isActive    Boolean @default(true)
+  capacity    Int     @default(1)
+  
+  // Relations
+  appointments Appointment[]
+  
+  @@map("locations")
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(PENDING)
+  totalAmount Decimal           @db.Decimal(10, 2)
+  notes       String?
+  qrCode      String?           @unique
+  qrCodeExpiresAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  // Relations
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  petId      String
+  pet        Pet      @relation(fields: [petId], references: [id])
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+  
+  // Payment
+  payment Payment?
+  
+  @@map("appointments")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  amount          Decimal       @db.Decimal(10, 2)
+  status          PaymentStatus @default(PENDING)
+  paymentMethod   String
+  mercadoPagoId   String?       @unique
+  mercadoPagoData Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relations
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  
+  @@map("payments")
+}
+
+model NotificationLog {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  recipient String
+  message   String
+  status    String
+  error     String?
+  createdAt DateTime         @default(now())
+  
+  @@map("notification_logs")
+}
+
+enum PetSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum NotificationType {
+  WHATSAPP
+  EMAIL
+  SMS
+}
