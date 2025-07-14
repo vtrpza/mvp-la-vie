@@ -2,9 +2,8 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { BookingForm } from '@/components/booking/booking-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { CalendarDays, ArrowLeft, Sparkles, Clock, CreditCard } from 'lucide-react'
-import Link from 'next/link'
+import { FormHeader } from '@/components/ui/page-header'
+import { Sparkles, Clock, CreditCard, CalendarDays } from 'lucide-react'
 
 export default async function NewAppointmentPage() {
   const session = await auth()
@@ -31,27 +30,16 @@ export default async function NewAppointmentPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      {/* Enhanced Header */}
-      <div className="space-y-6">
-        <Button variant="ghost" size="sm" asChild className="mb-4">
-          <Link href="/dashboard/agendamentos" className="flex items-center text-gray-600 hover:text-gray-900">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar aos Agendamentos
-          </Link>
-        </Button>
-        
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CalendarDays className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Novo Agendamento
-          </h1>
-          <p className="text-gray-600">
-            Agende o banho self-service para seu pet de forma rápida e segura
-          </p>
-        </div>
-      </div>
+      {/* Standardized Header */}
+      <FormHeader
+        title="Novo Agendamento"
+        description="Agende o banho self-service para seu pet de forma rápida e segura"
+        icon="calendar"
+        backLink={{
+          href: "/dashboard/agendamentos",
+          label: "Voltar aos Agendamentos"
+        }}
+      />
 
       {/* Service Info Cards */}
       <div className="grid gap-4 md:grid-cols-3">

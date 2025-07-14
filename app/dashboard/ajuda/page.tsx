@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { PageHeader } from '@/components/ui/page-header'
 import { 
   Clock, 
   MapPin, 
@@ -20,18 +21,14 @@ import Link from 'next/link'
 export default function HelpPage() {
   return (
     <div className="space-y-8">
-      {/* Enhanced Header */}
-      <div className="text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <HelpCircle className="w-8 h-8 text-white" />
-        </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Central de Ajuda
-        </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Encontre respostas para suas dúvidas sobre o La&apos;vie Pet Banho Experience e aprenda como aproveitar ao máximo nosso serviço
-        </p>
-      </div>
+      {/* Standardized Header */}
+      <PageHeader
+        title="Central de Ajuda"
+        description="Encontre respostas para suas dúvidas sobre o La'vie Pet Banho Experience e aprenda como aproveitar ao máximo nosso serviço"
+        icon={HelpCircle}
+        centered
+        gradient
+      />
 
       {/* Quick Actions - Mobile Responsive */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
