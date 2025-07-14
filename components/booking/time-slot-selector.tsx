@@ -64,12 +64,20 @@ export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled, 
         </div>
         
         {selectedSlot && (
-          <div className="mt-4 p-3 bg-green-50 rounded-md">
-            <p className="text-sm text-green-900">
-              <strong>Horário selecionado:</strong> {selectedSlot}
-            </p>
-            <p className="text-xs text-green-700 mt-1">
-              Duração: 30 minutos
+          <div className="mt-4 p-3 bg-green-50 rounded-md border border-green-200">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <p className="text-sm text-green-900 font-medium">
+                Horário selecionado: {selectedSlot}
+              </p>
+            </div>
+            <p className="text-xs text-green-700 mt-1 ml-4">
+              Duração: 30 minutos (até {(() => {
+                const [hours, minutes] = selectedSlot.split(':').map(Number);
+                const endTime = new Date();
+                endTime.setHours(hours, minutes + 30, 0, 0);
+                return endTime.toTimeString().slice(0, 5);
+              })()})
             </p>
           </div>
         )}

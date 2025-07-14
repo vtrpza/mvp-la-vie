@@ -36,6 +36,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedLocationId, setSelectedLocationId] = useState<string>('')
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const router = useRouter()
 
   const {
@@ -98,6 +99,11 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
   }
 
   const onSubmit = async (data: BookingFormData) => {
+    if (!showConfirmation) {
+      setShowConfirmation(true)
+      return
+    }
+
     setIsLoading(true)
     setError('')
 
@@ -125,6 +131,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
     } catch (error) {
       console.error('[CREATE_APPOINTMENT_ERROR]:', error)
       setError(error instanceof Error ? error.message : 'Erro interno do servidor')
+      setShowConfirmation(false) // Reset confirmation on error
     } finally {
       setIsLoading(false)
     }
@@ -156,10 +163,20 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         </Alert>
       )}
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+      {showConfirmation && (
+        <Alert className="bg-green-50 border-green-200">
+          <AlertDescription className="text-green-800">
+            <strong>Atenção:</strong> Verifique os detalhes do agendamento abaixo. Ao confirmar, você será direcionado para o pagamento.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <div className={`grid gap-6 sm:grid-cols-1 md:grid-cols-2 transition-opacity duration-300 ${
+        showConfirmation ? 'opacity-60 pointer-events-none' : ''
+      }`}>
         <div className="space-y-2">
           <Label htmlFor="petId">Selecione o pet</Label>
-          <Select onValueChange={(value) => setValue('petId', value)} disabled={isLoading}>
+          <Select onValueChange={(value) => setValue('petId', value)} disabled={isLoading || showConfirmation}>
             <SelectTrigger>
               <SelectValue placeholder="Escolha um pet" />
             </SelectTrigger>
@@ -181,7 +198,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
 
         <div className="space-y-2">
           <Label htmlFor="locationId">Unidade</Label>
-          <Select onValueChange={handleLocationChange} disabled={isLoading}>
+          <Select onValueChange={handleLocationChange} disabled={isLoading || showConfirmation}>
             <SelectTrigger>
               <SelectValue placeholder="Escolha uma unidade" />
             </SelectTrigger>
@@ -202,13 +219,15 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className={`space-y-4 transition-opacity duration-300 ${
+        showConfirmation ? 'opacity-60 pointer-events-none' : ''
+      }`}>
         <div className="space-y-2">
           <Label>Data do banho</Label>
           <CalendarSelector
             selectedDate={selectedDate}
             onDateSelect={handleDateSelect}
-            disabled={isLoading}
+            disabled={isLoading || showConfirmation}
           />
           {errors.date && (
             <p className="text-sm text-red-600">{errors.date.message}</p>
@@ -222,7 +241,7 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
               slots={availableSlots}
               selectedSlot={selectedTimeSlot}
               onSlotSelect={(slot) => setValue('startTime', slot)}
-              disabled={isLoading}
+              disabled={isLoading || showConfirmation}
               isLoading={isLoading && selectedDate && selectedLocationId ? true : false}
             />
             {errors.startTime && (
@@ -232,25 +251,75 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         )}
       </div>
 
-      <Card className="bg-blue-50">
+      <Card className={`transition-all duration-300 ${
+        selectedPetId && selectedLocationId && selectedDate && selectedTimeSlot 
+          ? 'bg-green-50 ring-2 ring-green-200' 
+          : 'bg-blue-50'
+      }`}>
         <CardHeader>
-          <CardTitle className="flex items-center text-blue-900">
+          <CardTitle className={`flex items-center ${
+            selectedPetId && selectedLocationId && selectedDate && selectedTimeSlot 
+              ? 'text-green-900' 
+              : 'text-blue-900'
+          }`}>
             <CreditCard className="mr-2 h-5 w-5" />
             Resumo do Agendamento
+            {selectedPetId && selectedLocationId && selectedDate && selectedTimeSlot && (
+              <span className="ml-2 text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                Pronto para confirmar
+              </span>
+            )}
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="flex justify-between">
-            <span>Duração:</span>
-            <span>30 minutos</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Valor:</span>
-            <span className="font-bold">R$ 30,00</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Formas de pagamento:</span>
-            <span>PIX ou Cartão</span>
+        <CardContent className="space-y-3">
+          {/* Selected Details */}
+          {selectedPetId && (
+            <div className="flex justify-between">
+              <span>Pet:</span>
+              <span className="font-medium">{pets.find(p => p.id === selectedPetId)?.name}</span>
+            </div>
+          )}
+          
+          {selectedLocationId && (
+            <div className="flex justify-between">
+              <span>Unidade:</span>
+              <span className="font-medium">{locations.find(l => l.id === selectedLocationId)?.name}</span>
+            </div>
+          )}
+          
+          {selectedDate && (
+            <div className="flex justify-between">
+              <span>Data:</span>
+              <span className="font-medium">
+                {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR', {
+                  weekday: 'short',
+                  day: 'numeric',
+                  month: 'short'
+                })}
+              </span>
+            </div>
+          )}
+          
+          {selectedTimeSlot && (
+            <div className="flex justify-between">
+              <span>Horário:</span>
+              <span className="font-medium">{selectedTimeSlot}</span>
+            </div>
+          )}
+          
+          <div className="border-t border-blue-200 pt-2">
+            <div className="flex justify-between">
+              <span>Duração:</span>
+              <span>30 minutos</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Valor:</span>
+              <span className="font-bold">R$ 30,00</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Formas de pagamento:</span>
+              <span>PIX ou Cartão</span>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -267,18 +336,36 @@ export function BookingForm({ pets, locations }: BookingFormProps) {
         </Button>
         <Button
           type="submit"
-          disabled={isLoading}
-          className="w-full sm:w-auto"
+          disabled={isLoading || !selectedPetId || !selectedLocationId || !selectedDate || !selectedTimeSlot}
+          className={`w-full sm:w-auto transition-all duration-300 ${
+            showConfirmation 
+              ? 'bg-green-600 hover:bg-green-700 ring-2 ring-green-300' 
+              : ''
+          }`}
         >
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Criando agendamento...
             </>
+          ) : showConfirmation ? (
+            'Confirmar e Prosseguir para Pagamento'
           ) : (
-            'Prosseguir para Pagamento'
+            'Revisar Agendamento'
           )}
         </Button>
+        
+        {showConfirmation && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowConfirmation(false)}
+            disabled={isLoading}
+            className="w-full sm:w-auto"
+          >
+            Editar Detalhes
+          </Button>
+        )}
       </div>
     </form>
   )

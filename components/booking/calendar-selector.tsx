@@ -23,6 +23,11 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
   }
 
   const isDateDisabled = (date: Date) => {
+    // If the component is disabled, disable all dates
+    if (disabled) {
+      return true
+    }
+    
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     
