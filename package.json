@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:seed": "prisma db seed",
+    "db:seed": "prisma db seed", 
     "db:studio": "prisma studio",
     "db:generate": "prisma generate"
   },
