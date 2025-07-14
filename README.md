@@ -229,3 +229,4 @@ Para mais informações, consulte:
 ---
 
 **Desenvolvido com ❤️ para La'vie Pet**
+VITOR POUZA
