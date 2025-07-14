@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect, memo, useCallback } from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useHapticFeedback } from '@/lib/hooks/use-haptic-feedback'
@@ -88,31 +87,39 @@ const TabBarItem = memo<{
     setIsPressed(true)
   }, [])
 
-  const handleTouchEnd = useCallback(() => {
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsPressed(false)
     onPress()
   }, [onPress])
 
   if (item.isSpecial) {
     return (
-      <Link href={item.href} className="flex justify-center">
-        <button
-          className={cn(
-            "relative flex flex-col items-center justify-center",
-            "w-14 h-14 rounded-full transition-all duration-200",
-            "bg-lavie-yellow hover:bg-lavie-black text-lavie-black hover:text-lavie-yellow shadow-lg",
-            "transform hover:scale-110 active:scale-95 touch-manipulation",
-            "focus:outline-none focus:ring-2 focus:ring-lavie-yellow/50 focus:ring-offset-2",
-            "border-2 border-lavie-black/10",
-            isPressed && "scale-95"
-          )}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleTouchStart}
-          onMouseUp={handleTouchEnd}
-          onMouseLeave={() => setIsPressed(false)}
-          aria-label={item.label}
-        >
+      <button
+        className={cn(
+          "relative flex flex-col items-center justify-center",
+          "w-14 h-14 rounded-full transition-all duration-200",
+          "bg-lavie-yellow hover:bg-lavie-black text-lavie-black hover:text-lavie-yellow shadow-lg",
+          "transform hover:scale-110 active:scale-95 touch-manipulation",
+          "focus:outline-none focus:ring-2 focus:ring-lavie-yellow/50 focus:ring-offset-2",
+          "border-2 border-lavie-black/10",
+          isPressed && "scale-95"
+        )}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={(e) => {
+          handleTouchEnd(e)
+          window.location.href = item.href
+        }}
+        onMouseDown={handleTouchStart}
+        onMouseUp={handleTouchEnd}
+        onMouseLeave={() => setIsPressed(false)}
+        onClick={(e) => {
+          e.preventDefault()
+          window.location.href = item.href
+        }}
+        aria-label={item.label}
+      >
           <Icon className="w-6 h-6" />
           
           {/* Enhanced ripple effect */}
@@ -126,29 +133,38 @@ const TabBarItem = memo<{
           {/* Glow effect */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavie-yellow to-lavie-yellow opacity-20 blur-lg" />
         </button>
-      </Link>
     )
   }
 
   return (
-    <Link href={item.href} className="flex-1">
-      <button
-        className={cn(
-          "relative w-full flex flex-col items-center justify-center py-2 px-1",
-          "transition-all duration-200 touch-manipulation group",
-          "focus:outline-none focus:bg-lavie-yellow/10 rounded-lg",
-          isActive && "text-lavie-black",
-          !isActive && "text-lavie-black/60 hover:text-lavie-black",
-          isPressed && "bg-lavie-yellow/10"
-        )}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleTouchStart}
-        onMouseUp={handleTouchEnd}
-        onMouseLeave={() => setIsPressed(false)}
-        aria-label={item.label}
-        aria-current={isActive ? 'page' : undefined}
-      >
+    <button
+      className={cn(
+        "relative flex-1 flex flex-col items-center justify-center py-2 px-1",
+        "transition-all duration-200 touch-manipulation group",
+        "focus:outline-none focus:bg-lavie-yellow/10 rounded-lg",
+        isActive && "text-lavie-black",
+        !isActive && "text-lavie-black/60 hover:text-lavie-black",
+        isPressed && "bg-lavie-yellow/10"
+      )}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={(e) => {
+        handleTouchEnd(e)
+        if (!isActive) {
+          window.location.href = item.href
+        }
+      }}
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onMouseLeave={() => setIsPressed(false)}
+      onClick={(e) => {
+        e.preventDefault()
+        if (!isActive) {
+          window.location.href = item.href
+        }
+      }}
+      aria-label={item.label}
+      aria-current={isActive ? 'page' : undefined}
+    >
         {/* Icon with badge */}
         <div className="relative mb-1">
           <Icon 
@@ -210,7 +226,6 @@ const TabBarItem = memo<{
           <div className="absolute inset-0 bg-lavie-yellow/30 rounded-lg" />
         )}
       </button>
-    </Link>
   )
 })
 
