@@ -315,7 +315,7 @@ export default function HomePage() {
               {
                 icon: <Calendar className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
                 title: "3. AGENDE SEU HORÁRIO",
-                description: "Escolha data e horário que preferir. Disponível 8h às 18h, todos os dias."
+                description: "Escolha data e horário que preferir. Disponível 7:30 às 22:30, todos os dias."
               },
               {
                 icon: <CreditCard className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
@@ -536,7 +536,7 @@ export default function HomePage() {
               <div className="flex flex-wrap justify-center gap-6 text-lavie-white/80 mb-6">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-5 h-5" />
-                  <span>8h às 18h</span>
+                  <span>7:30 às 22:30</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="w-5 h-5" />

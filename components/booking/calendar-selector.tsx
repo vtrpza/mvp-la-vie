@@ -101,7 +101,7 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
                 <p className="font-medium">Dicas para agendamento:</p>
                 <ul className="mt-1 space-y-0.5">
                   <li>• Disponível de hoje até {maxDate.toLocaleDateString('pt-BR')}</li>
-                  <li>• Funcionamento: 8h às 18h, todos os dias</li>
+                  <li>• Funcionamento: 7:30 às 22:30, todos os dias</li>
                 </ul>
               </div>
             </div>

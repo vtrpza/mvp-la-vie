@@ -189,7 +189,7 @@ UPSTASH_REDIS_REST_TOKEN="..."
 ### Agendamentos
 - Slots de 30 minutos
 - Intervalo de 15 minutos para limpeza
-- Funcionamento: 8h às 18h, todos os dias
+- Funcionamento: 7:30 às 22:30, todos os dias
 - Máximo 1 agendamento simultâneo por container
 - Cancelamento até 2h antes do horário
 

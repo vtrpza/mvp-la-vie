@@ -42,7 +42,7 @@ export function TimeSlotSelector({ slots, selectedSlot, onSlotSelect, disabled, 
             <p className="font-medium">Nenhum horário disponível</p>
             <p className="text-sm mt-1">Tente selecionar outra data ou unidade</p>
             <div className="mt-3 p-2 bg-amber-100 rounded text-xs">
-              <p><strong>Dica:</strong> Horários disponíveis das 8h às 18h</p>
+              <p><strong>Dica:</strong> Horários disponíveis das 7:30 às 22:30</p>
             </div>
           </div>
         </CardContent>

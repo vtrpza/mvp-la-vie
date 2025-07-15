@@ -400,7 +400,7 @@ async function DashboardContent() {
           <EnhancedStatCard
             title="Unidade Tambaú"
             value="Aberto Hoje"
-            description="Container equipado • 8h às 18h"
+            description="Container equipado • 7:30 às 22:30"
             icon="map-pin"
             variant="success"
             badge={{

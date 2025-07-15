@@ -145,7 +145,7 @@ export default function HelpPage() {
             
             <div className="space-y-2">
               <p className="text-sm font-medium">Horário de Funcionamento:</p>
-              <p className="text-sm text-gray-600">8h às 18h, todos os dias</p>
+              <p className="text-sm text-gray-600">7:30 às 22:30, todos os dias</p>
             </div>
             
             <div className="space-y-2">
@@ -299,7 +299,7 @@ export default function HelpPage() {
               <div>
                 <h4 className="font-medium text-yellow-800">Horário de Atendimento</h4>
                 <p className="text-sm text-yellow-700 mt-1">
-                  Segunda a Domingo: 8h às 18h
+                  Segunda a Domingo: 7:30 às 22:30
                 </p>
               </div>
             </div>
