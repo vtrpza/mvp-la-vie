@@ -523,7 +523,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div>
             <h2 className="text-4xl md:text-5xl font-display font-bold text-lavie-black mb-8 uppercase tracking-wide">
-              Primeira Unidade em Tambaú
+              Primeira Unidade em São Paulo
             </h2>
             <div className="bg-lavie-black/95 backdrop-blur-sm rounded-2xl p-8 mb-8">
               <p className="text-2xl md:text-3xl text-lavie-yellow font-display font-semibold mb-4">
