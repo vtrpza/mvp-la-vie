@@ -3,7 +3,8 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Calendar, HelpCircle, Home, User, Droplets, Sparkles } from 'lucide-react'
+import { Calendar, HelpCircle, Home, User, Plus } from 'lucide-react'
+import { PawIcon } from '@/components/ui/paw-icon'
 
 const navigation = [
   {
@@ -70,9 +71,8 @@ export function DashboardNav() {
           {/* Enhanced Header */}
           <div className="h-16 flex items-center justify-center px-6 border-b border-lavie-gray bg-gradient-to-r from-lavie-yellow to-lavie-yellow/80">
             <Link href="/dashboard" className="flex items-center space-x-3 group">
-              <div className="w-8 h-8 bg-lavie-black rounded-full flex items-center justify-center relative transition-transform duration-300 group-hover:scale-110">
-                <div className="w-5 h-5 bg-lavie-yellow rounded-full opacity-30"></div>
-                <Droplets className="w-4 h-4 text-lavie-yellow absolute" />
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center relative transition-transform duration-300 group-hover:scale-110">
+                <PawIcon size={16} color="white" variant="filled" />
               </div>
               <div className="font-display">
                 <span className="text-lg font-bold text-lavie-black">La'vie</span>
@@ -92,7 +92,7 @@ export function DashboardNav() {
                 href="/dashboard/agendamentos/novo"
                 className="flex items-center w-full px-4 py-3 bg-lavie-yellow hover:bg-lavie-black text-lavie-black hover:text-lavie-yellow rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
               >
-                <Sparkles className="w-5 h-5 mr-3" />
+                <Plus className="w-5 h-5 mr-3" />
                 <span>Agendar Banho</span>
               </Link>
             </div>

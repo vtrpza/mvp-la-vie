@@ -19,7 +19,6 @@ import {
   User, 
   Bell,
   HelpCircle,
-  Sparkles,
   Menu,
   X,
   ChevronRight,
@@ -27,6 +26,7 @@ import {
   Plus,
   Calendar
 } from 'lucide-react'
+import { PawIcon } from '@/components/ui/paw-icon'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -269,8 +269,8 @@ const EnhancedDashboardHeaderComponent = memo<EnhancedDashboardHeaderProps>(({
               aria-label="Ir para dashboard - La'vie Pet"
             >
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-200">
-                  <Sparkles className="w-5 h-5 text-white" />
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-200">
+                  <PawIcon size={20} color="white" variant="filled" />
                 </div>
                 <div>
                   <span className="text-xl font-bold text-gray-900 font-display">
@@ -489,8 +489,8 @@ export const MobileNavMenu = memo<{
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <PawIcon size={20} color="white" variant="filled" />
               </div>
               <span className="font-bold text-gray-900">La&apos;vie Pet</span>
             </div>
