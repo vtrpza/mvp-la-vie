@@ -637,7 +637,7 @@ export default function HomePage() {
           <div className="border-t border-lavie-white/20 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-lavie-white/60 mb-4 md:mb-0">
-                &copy; 2024 La&apos;vie Pet. Todos os direitos reservados.
+                &copy; 2025 La&apos;vie Pet. Todos os direitos reservados.
               </p>
               <div className="flex items-center space-x-6 text-lavie-white/60">
                 <span className="flex items-center space-x-2">
