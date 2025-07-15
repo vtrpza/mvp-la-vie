@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { EnhancedStatCard } from '@/components/ui/enhanced-stat-card'
 import { ListHeader } from '@/components/ui/page-header'
 import { PageErrorBoundary, SectionErrorBoundary } from '@/components/ui/error-boundary'
+import { Payment } from '@prisma/client'
 
 async function AppointmentsContent() {
   const session = await auth()
