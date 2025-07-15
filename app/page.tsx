@@ -230,7 +230,7 @@ export default function HomePage() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-lavie-yellow/20 rounded-bl-full -mr-10 -mt-10"></div>
                 
                 <h2 className="text-3xl md:text-4xl font-display font-bold text-lavie-black mb-6 relative z-10">
-                  Banho Self-Service Revolucionário
+                  Banho Experience
                 </h2>
                 <p className="text-lg text-lavie-black/80 mb-6 leading-relaxed">
                   Inovação no cuidado animal com autoatendimento sustentável. 
@@ -255,7 +255,7 @@ export default function HomePage() {
                   <div className="bg-lavie-gray/30 rounded-xl p-4 flex items-center space-x-3 hover:bg-lavie-yellow/20 transition-colors duration-300">
                     <MapPin className="w-8 h-8 text-lavie-black/70" />
                     <div>
-                      <span className="block font-semibold text-lavie-black">Tambaú/SP</span>
+                      <span className="block font-semibold text-lavie-black">São Paulo/SP</span>
                       <span className="text-sm text-lavie-black/60">Localização</span>
                     </div>
                   </div>
@@ -296,32 +296,36 @@ export default function HomePage() {
               Como Funciona
             </h2>
             <p className="text-xl text-lavie-black/70 max-w-3xl mx-auto leading-relaxed">
-              Escaneie, escolha, comece o banho. Em 4 passos simples, 
-              seu pet terá um banho confortável e você terá praticidade total.
+              Simples, rápido e sem complicações. Em 5 passos você e seu pet terão uma experiência única de banho.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-5 gap-6 lg:gap-8">
             {[
               {
                 icon: <Smartphone className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
-                title: "1. AGENDE ONLINE",
-                description: "Escolha data, horário e local pelo app. Disponível 24/7."
+                title: "1. ACESSE PELO SEU CELULAR",
+                description: "Abra o app La'vie Pet no seu smartphone. Cadastre-se rapidamente e faça login."
+              },
+              {
+                icon: <MapPin className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
+                title: "2. ESCOLHA O CONTAINER",
+                description: "Veja containers disponíveis em Tambaú/SP. Selecione o mais próximo e conveniente."
+              },
+              {
+                icon: <Calendar className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
+                title: "3. AGENDE SEU HORÁRIO",
+                description: "Escolha data e horário que preferir. Disponível 8h às 18h, todos os dias."
               },
               {
                 icon: <CreditCard className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
-                title: "2. PAGUE ONLINE",
-                description: "PIX ou cartão - R$ 30,00 fixo. Pagamento seguro e rápido."
-              },
-              {
-                icon: <QrCode className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
-                title: "3. RECEBA QR CODE",
-                description: "WhatsApp e email com código de acesso instantâneo."
+                title: "4. PAGUE E RECEBA QR CODE",
+                description: "PIX ou cartão - R$ 30,00 fixo. Receba o QR Code de acesso por WhatsApp e email."
               },
               {
                 icon: <PawIcon size={40} className="text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" variant="filled" />,
-                title: "4. COMECE O BANHO",
-                description: "Use o QR Code para acessar e dar banho com toda privacidade."
+                title: "5. CHEGUE E LIBERE PELO APP",
+                description: "Chegue no local, escaneie o QR Code e aproveite 30 minutos únicos com seu pet."
               }
             ].map((step, index) => (
               <div key={index} className="text-center group">
@@ -329,13 +333,51 @@ export default function HomePage() {
                   {step.icon}
                 </div>
                 <div className="bg-lavie-gray/50 rounded-xl p-6 hover:shadow-md transition-all duration-300 h-full flex flex-col group-hover:bg-lavie-yellow/10">
-                  <h3 className="text-xl font-display font-bold text-lavie-black mb-3">{step.title}</h3>
-                  <p className="text-lavie-black/70 leading-relaxed">
+                  <h3 className="text-lg font-display font-bold text-lavie-black mb-3 leading-tight">{step.title}</h3>
+                  <p className="text-lavie-black/70 leading-relaxed text-sm">
                     {step.description}
                   </p>
                 </div>
               </div>
             ))}
+          </div>
+          
+          {/* Produtos inclusos */}
+          <div className="mt-16 bg-lavie-yellow/10 rounded-2xl p-8 border-2 border-lavie-yellow/20">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-display font-bold text-lavie-black mb-3">
+                🧴 Tudo Incluído no Serviço
+              </h3>
+              <p className="text-lavie-black/70 text-lg">
+                Você não precisa se preocupar com nada. Todos os produtos e equipamentos estão inclusos:
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 text-center">
+              {[
+                { icon: "🧴", name: "Shampoo\nProfissional" },
+                { icon: "💧", name: "Condicionador\nHidratante" },
+                { icon: "🪥", name: "Escovas\nEspeciais" },
+                { icon: "💨", name: "Secador\nPotente" },
+                { icon: "🤍", name: "Toalhas\nLimpas" }
+              ].map((item, index) => (
+                <div key={index} className="bg-lavie-white rounded-xl p-4 hover:shadow-md transition-all duration-300 border border-lavie-gray/20">
+                  <div className="text-3xl mb-2">{item.icon}</div>
+                  <p className="text-sm font-semibold text-lavie-black whitespace-pre-line leading-tight">
+                    {item.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-8 text-center">
+              <div className="inline-flex items-center space-x-2 bg-lavie-black rounded-full px-6 py-3">
+                <CheckCircle2 className="w-5 h-5 text-lavie-green" />
+                <span className="text-lavie-white font-semibold">
+                  Produtos 100% biodegradáveis • Ambiente climatizado • Privacidade total
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -345,7 +387,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-display font-bold text-lavie-yellow mb-6 uppercase tracking-wide">
-              Nossos Valores
+              Conceito
             </h2>
             <p className="text-xl text-lavie-white/80 max-w-3xl mx-auto leading-relaxed">
               Inovação, conveniência, respeito à vida e consciência ambiental 
