@@ -585,7 +585,7 @@ export default function HomePage() {
               </p>
               <p className="text-lavie-white/80 leading-relaxed max-w-md">
                 Revolucionando o cuidado com pets através da inovação, 
-                conveniência e consciência ambiental em Tambaú/SP.
+                conveniência e consciência ambiental em São Paulo.
               </p>
             </div>
             
