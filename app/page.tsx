@@ -387,7 +387,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-display font-bold text-lavie-yellow mb-6 uppercase tracking-wide">
-              Conceito
+              Novo Conceito
             </h2>
             <p className="text-xl text-lavie-white/80 max-w-3xl mx-auto leading-relaxed">
               Inovação, conveniência, respeito à vida e consciência ambiental 
