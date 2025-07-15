@@ -15,7 +15,8 @@ import {
   Users,
   Clock,
   MapPin,
-  QrCode
+  QrCode,
+  HelpCircle
 } from 'lucide-react'
 
 // Icon mapping for client-server compatibility
@@ -30,7 +31,8 @@ const iconMap = {
   clock: Clock,
   'map-pin': MapPin,
   'qr-code': QrCode,
-  'arrow-left': ArrowLeft
+  'arrow-left': ArrowLeft,
+  'help-circle': HelpCircle
 } as const
 
 export type IconName = keyof typeof iconMap

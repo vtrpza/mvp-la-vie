@@ -39,7 +39,7 @@ async function AppointmentsContent() {
     (appointment) => new Date(appointment.date) < new Date()
   )
 
-  const getStatusInfo = (status: string, payment: any) => {
+  const getStatusInfo = (status: string, payment: Payment | null) => {
     switch (status) {
       case 'CONFIRMED':
         return {
@@ -288,15 +288,14 @@ async function AppointmentsContent() {
                         className="flex-1 sm:flex-none text-blue-600 hover:text-blue-700 hover:bg-blue-50 mobile-button touch-manipulation"
                         asChild
                       >
-                        <Link href={`#`} onClick={(e) => {
-                          e.preventDefault()
-                          // Aqui você pode integrar com Google Maps ou Apple Maps
-                          const address = encodeURIComponent(appointment.location.address || appointment.location.name)
-                          window.open(`https://maps.google.com/maps?q=${address}`, '_blank')
-                        }}>
+                        <a 
+                          href={`https://maps.google.com/maps?q=${encodeURIComponent(appointment.location.address || appointment.location.name)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <Navigation className="mr-2 h-4 w-4" />
                           Ver Local
-                        </Link>
+                        </a>
                       </Button>
                     </div>
                   </div>

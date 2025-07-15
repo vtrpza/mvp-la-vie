@@ -11,7 +11,6 @@ import {
   Mail, 
   AlertCircle,
   CheckCircle,
-  HelpCircle,
   MessageCircle,
   BookOpen,
   Sparkles
@@ -25,7 +24,7 @@ export default function HelpPage() {
       <PageHeader
         title="Central de Ajuda"
         description="Encontre respostas para suas dúvidas sobre o La'vie Pet Banho Experience e aprenda como aproveitar ao máximo nosso serviço"
-        icon={HelpCircle}
+        icon="help-circle"
         centered
         gradient
       />
