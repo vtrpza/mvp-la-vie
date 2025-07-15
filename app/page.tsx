@@ -187,7 +187,7 @@ export default function HomePage() {
             <div className="lg:w-1/2 text-center lg:text-left">
               <div className="mb-2">
                 <span className="inline-block bg-lavie-black text-lavie-yellow px-4 py-1 rounded-full text-sm font-semibold mb-4 animate-pulse">
-                  🎉 Primeira unidade em Tambaú/SP
+                  🎉 Primeira unidade em São Paulo
                 </span>
               </div>
               <h1 className="text-5xl md:text-6xl font-display font-bold text-lavie-black mb-4 leading-tight">
@@ -310,7 +310,7 @@ export default function HomePage() {
               {
                 icon: <MapPin className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
                 title: "2. ESCOLHA O CONTAINER",
-                description: "Veja containers disponíveis em Tambaú/SP. Selecione o mais próximo e conveniente."
+                description: "Veja containers disponíveis em São Paulo. Selecione o mais próximo e conveniente."
               },
               {
                 icon: <Calendar className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
@@ -605,7 +605,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-5 h-5 text-lavie-yellow" />
-                  <span>Tambaú - SP</span>
+                  <span>São Paulo</span>
                 </div>
               </div>
             </div>
