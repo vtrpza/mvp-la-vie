@@ -3,8 +3,10 @@ import { prisma } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import { QRCodeDisplay } from '@/components/qrcode/qrcode-display'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { QrCode, Calendar, MapPin, Heart, AlertTriangle } from 'lucide-react'
+import { QrCode, Calendar, MapPin, Heart, AlertTriangle, Timer, Clock } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 interface QRCodePageProps {
   params: Promise<{ id: string }>
@@ -41,10 +43,10 @@ export default async function QRCodePage({ params }: QRCodePageProps) {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900">
-          QR Code de Acesso
+          Acesso ao Container
         </h1>
         <p className="text-gray-600">
-          Use este código para acessar o container de banho
+          Use este QR Code para liberar o container e dar banho no seu pet
         </p>
       </div>
 
@@ -62,7 +64,7 @@ export default async function QRCodePage({ params }: QRCodePageProps) {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Calendar className="mr-2 h-5 w-5" />
-              Detalhes do Agendamento
+              Sua Reserva
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -126,18 +128,42 @@ export default async function QRCodePage({ params }: QRCodePageProps) {
               Código de Acesso
             </CardTitle>
             <CardDescription>
-              Escaneie ou mostre este código no container
+              Escaneie no leitor do container para liberar o acesso
             </CardDescription>
           </CardHeader>
           <CardContent>
             {isPaidAndConfirmed ? (
-              <QRCodeDisplay appointmentId={appointment.id} />
+              <div className="space-y-4">
+                <QRCodeDisplay appointmentId={appointment.id} />
+                <div className="text-center">
+                  <p className="text-sm text-green-600 font-medium">
+                    ✓ Pronto para usar!
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Escaneie no leitor do container
+                  </p>
+                </div>
+              </div>
             ) : (
-              <div className="text-center py-8">
-                <QrCode className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-gray-500">
-                  QR Code será gerado após confirmação do pagamento
-                </p>
+              <div className="text-center py-8 space-y-4">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                  <QrCode className="h-8 w-8 text-gray-400" />
+                </div>
+                <div>
+                  <p className="text-gray-600 font-medium mb-2">
+                    QR Code não disponível
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Complete o pagamento para liberar o acesso
+                  </p>
+                </div>
+                {appointment.payment?.status === 'PENDING' && (
+                  <Button asChild size="sm" className="mt-4">
+                    <Link href={`/dashboard/pagamento/${appointment.id}`}>
+                      Finalizar Pagamento
+                    </Link>
+                  </Button>
+                )}
               </div>
             )}
           </CardContent>
@@ -145,15 +171,55 @@ export default async function QRCodePage({ params }: QRCodePageProps) {
       </div>
 
       {isPaidAndConfirmed && (
-        <Card className="bg-blue-50">
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
           <CardHeader>
-            <CardTitle className="text-blue-900">Instruções de Uso</CardTitle>
+            <CardTitle className="text-blue-900 flex items-center">
+              <AlertTriangle className="mr-2 h-5 w-5" />
+              Instruções Importantes
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-blue-800">
-            <p>• <strong>Acesso liberado:</strong> 30 minutos antes do horário até o final da sessão</p>
-            <p>• <strong>Duração:</strong> 30 minutos para o banho</p>
-            <p>• <strong>Localização:</strong> {appointment.location.name}</p>
-            <p>• <strong>Endereço:</strong> {appointment.location.address}</p>
+          <CardContent className="space-y-4">
+            <div className="grid gap-3">
+              <div className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock className="h-4 w-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-blue-900">Horário de Acesso</p>
+                  <p className="text-sm text-blue-700">30 minutos antes até o final da sessão</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Timer className="h-4 w-4 text-blue-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-blue-900">Tempo de Uso</p>
+                  <p className="text-sm text-blue-700">30 minutos para banho completo</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <MapPin className="h-4 w-4 text-purple-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-blue-900">Local</p>
+                  <p className="text-sm text-blue-700">{appointment.location.name}</p>
+                  {appointment.location.address && (
+                    <p className="text-xs text-blue-600">{appointment.location.address}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-sm text-amber-800 flex items-center">
+                <AlertTriangle className="mr-2 h-4 w-4 text-amber-600" />
+                <strong>Lembre-se:</strong> Traga toalha e produtos de banho se desejar usar os seus próprios
+              </p>
+            </div>
           </CardContent>
         </Card>
       )}
