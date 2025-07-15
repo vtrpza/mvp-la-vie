@@ -332,7 +332,7 @@ export default function HomePage() {
                 <div className="w-20 h-20 bg-lavie-yellow rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-lavie-black transition-colors duration-300 shadow-lg transform group-hover:scale-110">
                   {step.icon}
                 </div>
-                <div className="bg-lavie-gray/50 rounded-xl p-6 hover:shadow-md transition-all duration-300 h-full flex flex-col group-hover:bg-lavie-yellow/10">
+                <div className="bg-lavie-gray/50 rounded-xl p-6 hover:shadow-md transition-all duration-300 h-50 flex flex-col group-hover:bg-lavie-yellow/10">
                   <h3 className="text-lg font-display font-bold text-lavie-black mb-3 leading-tight">{step.title}</h3>
                   <p className="text-lavie-black/70 leading-relaxed text-sm">
                     {step.description}
