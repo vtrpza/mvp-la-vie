@@ -257,33 +257,37 @@ export const ListHeader = memo<{
     label: string
     icon?: IconName | LucideIcon
   }
-}>(({ title, description, itemCount, createAction }) => (
-  <PageHeader
-    title={title}
-    description={description}
-    badge={itemCount !== undefined ? {
-      text: `${itemCount} item${itemCount !== 1 ? 's' : ''}`,
-      variant: 'info'
-    } : undefined}
-    actions={createAction && (
-      <Button 
-        asChild 
-        size="lg" 
-        className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105"
-      >
-        <Link href={createAction.href}>
-          {createAction.icon && (() => {
-            const Icon = typeof createAction.icon === 'string' 
-              ? iconMap[createAction.icon as IconName] 
-              : createAction.icon
-            return <Icon className="mr-2 h-5 w-5" />
-          })()}
-          {createAction.label}
-        </Link>
-      </Button>
-    )}
-  />
-))
+}>(({ title, description, itemCount, createAction }) => {
+  // Resolve icon outside JSX to avoid passing functions to Client Components
+  const CreateActionIcon = createAction?.icon && (
+    typeof createAction.icon === 'string' 
+      ? iconMap[createAction.icon as IconName] 
+      : createAction.icon
+  )
+
+  return (
+    <PageHeader
+      title={title}
+      description={description}
+      badge={itemCount !== undefined ? {
+        text: `${itemCount} item${itemCount !== 1 ? 's' : ''}`,
+        variant: 'info'
+      } : undefined}
+      actions={createAction && (
+        <Button 
+          asChild 
+          size="lg" 
+          className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105"
+        >
+          <Link href={createAction.href}>
+            {CreateActionIcon && <CreateActionIcon className="mr-2 h-5 w-5" />}
+            {createAction.label}
+          </Link>
+        </Button>
+      )}
+    />
+  )
+})
 
 ListHeader.displayName = 'ListHeader'
 
