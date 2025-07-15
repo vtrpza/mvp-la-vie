@@ -10,7 +10,6 @@ import {
   QrCode, 
   Clock, 
   Smartphone, 
-  Droplets, 
   Heart, 
   Sparkles, 
   Leaf, 
@@ -19,6 +18,7 @@ import {
   X,
   CheckCircle2
 } from 'lucide-react'
+import { PawIcon } from '@/components/ui/paw-icon'
 
 // Testimonial data
 const testimonials = [
@@ -71,9 +71,8 @@ export default function HomePage() {
             <div className="flex items-center">
               {/* Logo */}
               <Link href="/" className="flex items-center space-x-3 group">
-                <div className="w-10 h-10 bg-lavie-yellow rounded-full flex items-center justify-center relative transition-transform duration-300 group-hover:scale-110">
-                  <div className="w-6 h-6 bg-lavie-black rounded-full opacity-20"></div>
-                  <Droplets className="w-5 h-5 text-lavie-black absolute" />
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-lg">
+                  <PawIcon size={24} color="white" variant="filled" />
                 </div>
                 <div className="font-display">
                   <span className="text-2xl font-bold text-lavie-black">La&apos;vie</span>
@@ -320,7 +319,7 @@ export default function HomePage() {
                 description: "WhatsApp e email com código de acesso instantâneo."
               },
               {
-                icon: <Droplets className="h-10 w-10 text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" />,
+                icon: <PawIcon size={40} className="text-lavie-black group-hover:text-lavie-yellow transition-colors duration-300" variant="filled" />,
                 title: "4. COMECE O BANHO",
                 description: "Use o QR Code para acessar e dar banho com toda privacidade."
               }
@@ -531,8 +530,8 @@ export default function HomePage() {
             {/* Logo e Tagline */}
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-lavie-yellow rounded-full flex items-center justify-center relative">
-                  <Droplets className="w-7 h-7 text-lavie-black" />
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <PawIcon size={28} color="white" variant="filled" />
                 </div>
                 <div className="font-display">
                   <span className="text-3xl font-bold text-lavie-white">La&apos;vie</span>
@@ -586,7 +585,7 @@ export default function HomePage() {
                   <span>Pagamento Digital</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Droplets className="w-4 h-4 text-lavie-yellow" />
+                  <PawIcon size={16} color="#f59e0b" variant="filled" />
                   <span>Container Self-Service</span>
                 </div>
               </div>
