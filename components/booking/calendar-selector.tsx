@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CalendarDays, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
 
 interface CalendarSelectorProps {
   selectedDate: string
@@ -45,8 +45,14 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
 
   const selectedDateObj = selectedDate ? new Date(selectedDate + 'T00:00:00') : undefined
 
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  
+  const maxDate = new Date()
+  maxDate.setDate(maxDate.getDate() + 30)
+
   return (
-    <Card>
+    <Card className={disabled ? 'opacity-50' : ''}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-medium flex items-center">
@@ -66,7 +72,7 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <span className="text-sm font-medium min-w-[120px] text-center">
+            <span className="text-sm font-medium min-w-[120px] text-center capitalize">
               {currentMonth.toLocaleDateString('pt-BR', { 
                 month: 'long', 
                 year: 'numeric' 
@@ -87,6 +93,21 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
           </div>
         </div>
         
+        {!disabled && (
+          <div className="mb-3 p-2 bg-amber-50 border border-amber-200 rounded-md">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="text-xs text-amber-800">
+                <p className="font-medium">Dicas para agendamento:</p>
+                <ul className="mt-1 space-y-0.5">
+                  <li>• Disponível de hoje até {maxDate.toLocaleDateString('pt-BR')}</li>
+                  <li>• Funcionamento: 8h às 18h, todos os dias</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <Calendar
           mode="single"
           selected={selectedDateObj}
@@ -94,19 +115,27 @@ export function CalendarSelector({ selectedDate, onDateSelect, disabled }: Calen
           disabled={isDateDisabled}
           month={currentMonth}
           onMonthChange={setCurrentMonth}
-          className="rounded-md border w-full"
+          className={`rounded-md border w-full transition-all duration-300 ${
+            selectedDate ? 'ring-2 ring-green-200' : ''
+          }`}
         />
         
         {selectedDate && (
-          <div className="mt-4 p-3 bg-blue-50 rounded-md">
-            <p className="text-sm text-blue-900">
-              <strong>Data selecionada:</strong> {' '}
-              {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+          <div className="mt-4 p-3 bg-green-50 rounded-md border border-green-200 animate-in slide-in-from-bottom-2 duration-300">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <p className="text-sm text-green-900 font-medium">
+                <strong>Data selecionada:</strong> {' '}
+                {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+            <p className="text-xs text-green-700 mt-1 ml-4">
+              Agora selecione um horário disponível
             </p>
           </div>
         )}
