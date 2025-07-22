@@ -227,10 +227,8 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
 
       <div className="space-y-3">
         <Card 
-          className={`cursor-pointer transition-colors ${
-            paymentMethod === 'PIX' ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
-          }`}
-          onClick={() => setPaymentMethod('PIX')}
+          className="cursor-pointer transition-colors hover:bg-gray-50 hover:shadow-md"
+          onClick={() => router.push(`/dashboard/pagamento/pix/${appointment.id}`)}
         >
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -247,10 +245,8 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
         </Card>
 
         <Card 
-          className={`cursor-pointer transition-colors ${
-            paymentMethod === 'CREDIT_CARD' ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
-          }`}
-          onClick={() => setPaymentMethod('CREDIT_CARD')}
+          className="cursor-pointer transition-colors hover:bg-gray-50 hover:shadow-md"
+          onClick={() => router.push(`/dashboard/pagamento/cartao/${appointment.id}`)}
         >
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
@@ -264,58 +260,15 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
         </Card>
       </div>
 
-      {paymentMethod && (
-        <div className="pt-4 space-y-3">
-          {paymentMethod === 'PIX' && (
-            <Button
-              className="w-full"
-              onClick={handlePixPayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Gerando PIX...
-                </>
-              ) : (
-                <>
-                  <QrCode className="mr-2 h-4 w-4" />
-                  Pagar com PIX - R$ {appointment.totalAmount.toFixed(2)}
-                </>
-              )}
-            </Button>
-          )}
-
-          {paymentMethod === 'CREDIT_CARD' && (
-            <Button
-              className="w-full"
-              onClick={handleCreditCardPayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processando...
-                </>
-              ) : (
-                <>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Pagar com Cartão - R$ {appointment.totalAmount.toFixed(2)}
-                </>
-              )}
-            </Button>
-          )}
-
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => router.push('/dashboard/agendamentos')}
-            disabled={isProcessing}
-          >
-            Cancelar
-          </Button>
-        </div>
-      )}
+      <div className="pt-4">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => router.push('/dashboard/agendamentos')}
+        >
+          Voltar aos Agendamentos
+        </Button>
+      </div>
     </div>
   )
 }
