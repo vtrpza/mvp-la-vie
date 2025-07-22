@@ -1,23 +1,30 @@
 // Mock mode flag - set to true to use mocked payments
 const IS_MOCK_MODE = process.env.PAYMENT_MOCK_MODE === 'true' || !process.env.MERCADOPAGO_ACCESS_TOKEN
 
-// Only import and configure MercadoPago if not in mock mode
+// Conditional imports for MercadoPago
 let preference: any = null
 let payment: any = null
 
-if (!IS_MOCK_MODE) {
-  const { MercadoPagoConfig, Preference, Payment } = require('mercadopago')
-  
-  const client = new MercadoPagoConfig({
-    accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
-    options: {
-      timeout: 5000,
-      idempotencyKey: 'abc'
+async function initializeMercadoPago() {
+  if (!IS_MOCK_MODE && !preference && !payment) {
+    try {
+      const { MercadoPagoConfig, Preference, Payment } = await import('mercadopago')
+      
+      const client = new MercadoPagoConfig({
+        accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
+        options: {
+          timeout: 5000,
+          idempotencyKey: 'abc'
+        }
+      })
+      
+      preference = new Preference(client)
+      payment = new Payment(client)
+    } catch (error) {
+      console.error('[MERCADOPAGO_INIT_ERROR]:', error)
+      throw new Error('Erro ao inicializar Mercado Pago')
     }
-  })
-  
-  preference = new Preference(client)
-  payment = new Payment(client)
+  }
 }
 
 export interface PaymentData {
@@ -69,6 +76,8 @@ export async function createPixPayment(data: PaymentData): Promise<PixPaymentRes
   }
   
   try {
+    await initializeMercadoPago()
+    
     const paymentData = {
       transaction_amount: data.amount,
       description: data.description,
@@ -119,6 +128,8 @@ export async function createCardPayment(data: PaymentData): Promise<CardPaymentR
   }
   
   try {
+    await initializeMercadoPago()
+    
     const preferenceData = {
       items: [
         {
@@ -203,6 +214,8 @@ export async function getPaymentStatus(paymentId: string) {
   }
   
   try {
+    await initializeMercadoPago()
+    
     const result = await payment.get({ id: paymentId })
     return {
       id: result.id!.toString(),
