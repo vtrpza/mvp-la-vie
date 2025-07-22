@@ -114,7 +114,7 @@ export function CardPaymentComponent({ appointment }: CardPaymentComponentProps)
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-gray-600">Você está pagando:</span>
           <span className="text-2xl font-bold text-green-600">
-            R$ {appointment.totalAmount.toFixed(2)}
+            R$ {Number(appointment.totalAmount).toFixed(2)}
           </span>
         </div>
         <div className="text-sm text-gray-600">

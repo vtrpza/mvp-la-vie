@@ -94,7 +94,7 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
               <div className="flex justify-between items-center">
                 <span className="text-lg font-medium">Total:</span>
                 <span className="text-2xl font-bold text-green-600">
-                  R$ {appointment.totalAmount.toFixed(2)}
+                  R$ {Number(appointment.totalAmount).toFixed(2)}
                 </span>
               </div>
             </div>

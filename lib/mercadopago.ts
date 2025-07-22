@@ -1,3 +1,5 @@
+import QRCode from 'qrcode'
+
 // Mock mode flag - set to true to use mocked payments
 const IS_MOCK_MODE = process.env.PAYMENT_MOCK_MODE === 'true' || !process.env.MERCADOPAGO_ACCESS_TOKEN
 
@@ -47,14 +49,72 @@ export interface CardPaymentResponse {
   sandboxInitPoint: string
 }
 
-// Mock QR Code generation
-function generateMockQrCode(): string {
-  return `00020101021243650016COM.MERCADOLIVRE02013063204${Math.random().toString().substring(2, 10)}520400005303986540530.005802BR5909Test User6009SAO PAULO62070503***63041D3D`
+// Mock QR Code generation with real QR code
+
+function generateMockQrCode(amount: number): string {
+  // Generate a realistic PIX BR Code following the standard format
+  const payloadFormatIndicator = '00020101' // Payload Format Indicator
+  const pointOfInitiation = '0102' // Point of initiation method (static)
+  
+  // Merchant account information (Tag 26 - PIX)
+  const pixKey = Math.random().toString(36).substr(2, 32) // Mock PIX key
+  const pixDomain = '0014br.gov.bcb.pix01' + (pixKey.length.toString().padStart(2, '0')) + pixKey
+  const merchantAccountLength = pixDomain.length.toString().padStart(2, '0')
+  const merchantAccount = '26' + merchantAccountLength + pixDomain
+  
+  // Transaction amount (if specified)
+  const amountStr = amount.toFixed(2)
+  const transactionAmount = `54${amountStr.length.toString().padStart(2, '0')}${amountStr}`
+  
+  // Transaction currency (BRL = 986)
+  const currency = '5303986'
+  
+  // Country code (BR)
+  const countryCode = '5802BR'
+  
+  // Merchant name
+  const merchantName = `5911La'vie Pet`
+  
+  // Merchant city
+  const merchantCity = '6009SAO PAULO'
+  
+  // Additional data field template (transaction ID)
+  const txId = Math.random().toString(36).substr(2, 16)
+  const additionalData = `62${(txId.length + 2).toString().padStart(2, '0')}05${txId.length.toString().padStart(2, '0')}${txId}`
+  
+  // Combine all fields (without CRC)
+  const payload = payloadFormatIndicator + pointOfInitiation + merchantAccount + 
+                 transactionAmount + currency + countryCode + merchantName + 
+                 merchantCity + additionalData + '6304' // CRC placeholder
+  
+  // Calculate CRC16 (simplified - using mock)
+  const crc = Math.floor(Math.random() * 65536).toString(16).toUpperCase().padStart(4, '0')
+  
+  return payload + crc
 }
 
-function generateMockQrCodeBase64(): string {
-  // A simple base64 encoded 1x1 pixel PNG - in real app, you'd generate actual QR code image
-  return 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+async function generateMockQrCodeBase64(pixCode: string): Promise<string> {
+  try {
+    // Generate real QR code image as base64
+    const qrCodeDataURL = await QRCode.toDataURL(pixCode, {
+      errorCorrectionLevel: 'M',
+      type: 'image/png',
+      quality: 0.92,
+      margin: 1,
+      width: 256,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    })
+    
+    // Remove data:image/png;base64, prefix to get just the base64 string
+    return qrCodeDataURL.replace(/^data:image\/png;base64,/, '')
+  } catch (error) {
+    console.error('[MOCK_QR_GENERATION_ERROR]:', error)
+    // Fallback to simple base64 image if QR generation fails
+    return 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+  }
 }
 
 export async function createPixPayment(data: PaymentData): Promise<PixPaymentResponse> {
@@ -66,11 +126,13 @@ export async function createPixPayment(data: PaymentData): Promise<PixPaymentRes
     
     const mockId = `mock_pix_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     const expirationDate = new Date(Date.now() + 30 * 60 * 1000) // 30 minutes from now
+    const pixCode = generateMockQrCode(data.amount)
+    const qrCodeBase64 = await generateMockQrCodeBase64(pixCode)
     
     return {
       id: mockId,
-      qrCode: generateMockQrCode(),
-      qrCodeBase64: generateMockQrCodeBase64(),
+      qrCode: pixCode,
+      qrCodeBase64: qrCodeBase64,
       expirationDate: expirationDate.toISOString(),
     }
   }

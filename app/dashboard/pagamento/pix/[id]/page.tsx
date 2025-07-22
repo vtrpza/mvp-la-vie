@@ -140,7 +140,7 @@ export default async function PixPaymentPage({ params }: PixPaymentPageProps) {
               <div className="flex justify-between items-center">
                 <span className="text-base font-medium">Total a pagar:</span>
                 <span className="text-2xl font-bold text-green-600">
-                  R$ {appointment.totalAmount.toFixed(2)}
+                  R$ {Number(appointment.totalAmount).toFixed(2)}
                 </span>
               </div>
               <p className="text-xs text-gray-500 mt-1">
