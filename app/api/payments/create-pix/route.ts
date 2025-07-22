@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { createPixPayment } from '@/lib/mercadopago'
+import { createPixPayment, IS_MOCK_MODE } from '@/lib/mercadopago'
+import { startPixPaymentSimulation } from '@/lib/mock-payment-simulator'
 import { z } from 'zod'
 
 const createPixPaymentSchema = z.object({
@@ -74,11 +75,18 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Start payment simulation for mock mode
+    if (IS_MOCK_MODE) {
+      startPixPaymentSimulation(pixPayment.id, appointmentId)
+      console.log('[MOCK_PIX] Simulação de pagamento iniciada para:', pixPayment.id)
+    }
+
     return NextResponse.json({
       paymentId: payment.id,
       qrCode: pixPayment.qrCode,
       qrCodeBase64: pixPayment.qrCodeBase64,
       expirationDate: pixPayment.expirationDate,
+      isMockMode: IS_MOCK_MODE,
     })
   } catch (error) {
     console.error('[CREATE_PIX_PAYMENT_ERROR]:', error)

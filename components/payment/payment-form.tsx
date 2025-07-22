@@ -26,6 +26,7 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
   const [pixCode, setPixCode] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [isMockMode, setIsMockMode] = useState(false)
   const router = useRouter()
 
   const handlePixPayment = async () => {
@@ -54,6 +55,7 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
       const data = await response.json()
       setPixQrCode(data.qrCodeBase64)
       setPixCode(data.qrCode)
+      setIsMockMode(data.isMockMode || false)
       
       // Iniciar polling para verificar pagamento
       startPaymentPolling()
@@ -89,6 +91,7 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
       }
 
       const data = await response.json()
+      setIsMockMode(data.isMockMode || false)
       
       // Redirecionar para checkout do Mercado Pago
       if (data.initPoint) {
@@ -182,6 +185,11 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
         <Alert>
           <AlertDescription>
             <strong>Aguardando pagamento...</strong> O status será atualizado automaticamente quando o pagamento for processado.
+            {isMockMode && (
+              <div className="mt-2 text-sm text-blue-600">
+                🧪 <strong>Modo de Teste:</strong> Este é um pagamento simulado. O pagamento será aprovado automaticamente em 5-10 segundos.
+              </div>
+            )}
           </AlertDescription>
         </Alert>
 
@@ -205,6 +213,15 @@ export function PaymentForm({ appointment }: PaymentFormProps) {
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {isMockMode && (
+        <Alert>
+          <AlertDescription>
+            🧪 <strong>Modo de Desenvolvimento:</strong> Os pagamentos estão sendo simulados para testes. 
+            Todos os pagamentos serão processados automaticamente sem cobrança real.
+          </AlertDescription>
         </Alert>
       )}
 

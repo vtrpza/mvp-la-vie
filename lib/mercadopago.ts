@@ -1,16 +1,24 @@
-import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
+// Mock mode flag - set to true to use mocked payments
+const IS_MOCK_MODE = process.env.PAYMENT_MOCK_MODE === 'true' || !process.env.MERCADOPAGO_ACCESS_TOKEN
 
-// Configurar cliente Mercado Pago
-const client = new MercadoPagoConfig({
-  accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
-  options: {
-    timeout: 5000,
-    idempotencyKey: 'abc'
-  }
-})
+// Only import and configure MercadoPago if not in mock mode
+let preference: any = null
+let payment: any = null
 
-export const preference = new Preference(client)
-export const payment = new Payment(client)
+if (!IS_MOCK_MODE) {
+  const { MercadoPagoConfig, Preference, Payment } = require('mercadopago')
+  
+  const client = new MercadoPagoConfig({
+    accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
+    options: {
+      timeout: 5000,
+      idempotencyKey: 'abc'
+    }
+  })
+  
+  preference = new Preference(client)
+  payment = new Payment(client)
+}
 
 export interface PaymentData {
   appointmentId: string
@@ -32,7 +40,34 @@ export interface CardPaymentResponse {
   sandboxInitPoint: string
 }
 
+// Mock QR Code generation
+function generateMockQrCode(): string {
+  return `00020101021243650016COM.MERCADOLIVRE02013063204${Math.random().toString().substring(2, 10)}520400005303986540530.005802BR5909Test User6009SAO PAULO62070503***63041D3D`
+}
+
+function generateMockQrCodeBase64(): string {
+  // A simple base64 encoded 1x1 pixel PNG - in real app, you'd generate actual QR code image
+  return 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+}
+
 export async function createPixPayment(data: PaymentData): Promise<PixPaymentResponse> {
+  if (IS_MOCK_MODE) {
+    console.log('[MOCK_PIX_PAYMENT] Criando pagamento PIX mockado:', data)
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    const mockId = `mock_pix_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const expirationDate = new Date(Date.now() + 30 * 60 * 1000) // 30 minutes from now
+    
+    return {
+      id: mockId,
+      qrCode: generateMockQrCode(),
+      qrCodeBase64: generateMockQrCodeBase64(),
+      expirationDate: expirationDate.toISOString(),
+    }
+  }
+  
   try {
     const paymentData = {
       transaction_amount: data.amount,
@@ -67,6 +102,22 @@ export async function createPixPayment(data: PaymentData): Promise<PixPaymentRes
 }
 
 export async function createCardPayment(data: PaymentData): Promise<CardPaymentResponse> {
+  if (IS_MOCK_MODE) {
+    console.log('[MOCK_CARD_PAYMENT] Criando pagamento com cartão mockado:', data)
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 800))
+    
+    const mockId = `mock_card_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    
+    return {
+      id: mockId,
+      initPoint: `${baseUrl}/api/payments/mock-checkout?payment_id=${mockId}&appointment_id=${data.appointmentId}`,
+      sandboxInitPoint: `${baseUrl}/api/payments/mock-checkout?payment_id=${mockId}&appointment_id=${data.appointmentId}&sandbox=true`,
+    }
+  }
+  
   try {
     const preferenceData = {
       items: [
@@ -115,7 +166,42 @@ export async function createCardPayment(data: PaymentData): Promise<CardPaymentR
   }
 }
 
+// Mock payment status simulation - simulates approval after 5-10 seconds
+const mockPaymentStatuses: { [key: string]: { status: string; createdAt: number } } = {}
+
 export async function getPaymentStatus(paymentId: string) {
+  if (IS_MOCK_MODE) {
+    console.log('[MOCK_PAYMENT_STATUS] Verificando status do pagamento mockado:', paymentId)
+    
+    // Initialize mock payment if not exists
+    if (!mockPaymentStatuses[paymentId]) {
+      mockPaymentStatuses[paymentId] = {
+        status: 'pending',
+        createdAt: Date.now()
+      }
+    }
+    
+    const mockPayment = mockPaymentStatuses[paymentId]
+    const elapsedTime = Date.now() - mockPayment.createdAt
+    
+    // Auto-approve after 5-10 seconds (simulate real payment time)
+    if (elapsedTime > 5000 && mockPayment.status === 'pending') {
+      // 90% success rate simulation
+      mockPayment.status = Math.random() > 0.1 ? 'approved' : 'rejected'
+    }
+    
+    return {
+      id: paymentId,
+      status: mockPayment.status,
+      statusDetail: mockPayment.status === 'approved' ? 'accredited' : 
+                   mockPayment.status === 'rejected' ? 'cc_rejected_other_reason' : 'pending',
+      transactionAmount: 30.00,
+      metadata: {
+        appointment_id: paymentId.split('_')[2] || 'unknown'
+      },
+    }
+  }
+  
   try {
     const result = await payment.get({ id: paymentId })
     return {
@@ -130,3 +216,6 @@ export async function getPaymentStatus(paymentId: string) {
     throw new Error('Erro ao verificar status do pagamento')
   }
 }
+
+// Export mock mode flag for other modules
+export { IS_MOCK_MODE }

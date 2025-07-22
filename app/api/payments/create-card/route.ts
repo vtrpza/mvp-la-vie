@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { createCardPayment } from '@/lib/mercadopago'
+import { createCardPayment, IS_MOCK_MODE } from '@/lib/mercadopago'
 import { z } from 'zod'
 
 const createCardPaymentSchema = z.object({
@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
       preferenceId: cardPayment.id,
       initPoint: cardPayment.initPoint,
       sandboxInitPoint: cardPayment.sandboxInitPoint,
+      isMockMode: IS_MOCK_MODE,
     })
   } catch (error) {
     console.error('[CREATE_CARD_PAYMENT_ERROR]:', error)
