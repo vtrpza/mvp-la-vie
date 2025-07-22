@@ -97,9 +97,7 @@ async function generateMockQrCodeBase64(pixCode: string): Promise<string> {
   try {
     // Generate real QR code image as base64
     const qrCodeDataURL = await QRCode.toDataURL(pixCode, {
-      errorCorrectionLevel: 'M',
-      type: 'image/png',
-      quality: 0.92,
+      errorCorrectionLevel: 'M' as const,
       margin: 1,
       width: 256,
       color: {
